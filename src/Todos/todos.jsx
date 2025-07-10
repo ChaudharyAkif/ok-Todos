@@ -4,14 +4,17 @@ import { Button, Space, Table, Modal, Input, Typography } from "antd";
 import { collection, deleteDoc, doc, onSnapshot, updateDoc } from "firebase/firestore";
 import { firestore } from "../config/firebase";
 import { useAuth } from "../context/authcontext";
+import { Navigate, useNavigate } from "react-router-dom";
 
 const { Title } = Typography;
 
 const TodosTable = () => {
+
   const { user } = useAuth();
   const [todos, setTodos] = useState([]);
   const [editingTodo, setEditingTodo] = useState(null);
 
+   const navigate  = useNavigate()
   useEffect(() => {
     const unsub = onSnapshot(collection(firestore, "todos"), (snapshot) => {
       const data = snapshot.docs
@@ -23,9 +26,13 @@ const TodosTable = () => {
     return () => unsub();
   }, [user]);
 
+  const handlenavigate = ()=>{
+navigate("/todos/add")
+  }
   const handleDelete = async (id) => {
     await deleteDoc(doc(firestore, "todos", id));
   };
+
 
   const handleEdit = async () => {
     const { id, title, location, description } = editingTodo;
@@ -70,6 +77,7 @@ const TodosTable = () => {
   return (
     <div className="p-4">
       <Title level={3}>Your Todos</Title>
+         <Button type="primary" onClick={handlenavigate}>Add Todos</Button>
       <Table
         columns={columns}
         dataSource={todos.map((t) => ({ ...t, key: t.id }))}
@@ -107,6 +115,7 @@ const TodosTable = () => {
           }
         />
       </Modal>
+
     </div>
   );
 };

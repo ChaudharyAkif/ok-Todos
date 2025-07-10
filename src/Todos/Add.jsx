@@ -13,6 +13,7 @@ import TextArea from 'antd/es/input/TextArea';
 import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
 import { firestore } from '../config/firebase';
 import { useAuth } from '../context/authcontext';
+import { useNavigate } from 'react-router-dom';
 
 const initialState = { title: '', location: '', description: '' };
 
@@ -23,7 +24,10 @@ const Add = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [form] = Form.useForm();
-
+  const navigate = useNavigate()
+  const handlenavigate = () => {
+    navigate("/")
+  }
   const handleChange = (e) =>
     setState((s) => ({ ...s, [e.target.name]: e.target.value }));
 
@@ -184,6 +188,7 @@ const Add = () => {
                   >
                     Add Todo
                   </Button>
+                  <Button type='primary' block className='mt-2' size='large' onClick={handlenavigate}>Show Todos</Button>
                 </Col>
               </Row>
             </Form>
